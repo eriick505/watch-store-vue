@@ -39,34 +39,12 @@
       </button>
     </div>
     <hr class="my-3" />
-    <cart-item />
-    <div class="mt-8">
-      <form class="flex items-center justify-center">
-        <input
-          class="form-input w-48"
-          type="text"
-          placeholder="Add promocode"
-        />
-        <button
-          class="
-            ml-3
-            flex
-            items-center
-            px-3
-            py-2
-            bg-blue-600
-            text-white text-sm
-            uppercase
-            font-medium
-            rounded
-            hover:bg-blue-500
-            focus:outline-none focus:bg-blue-500
-          "
-        >
-          <span>Apply</span>
-        </button>
-      </form>
-    </div>
+    <cart-item
+      v-for="product in products"
+      :key="product.id"
+      :product="product"
+    />
+    <h3 v-if="!hasProducts">Cart is empty</h3>
     <a
       class="
         flex
@@ -84,7 +62,7 @@
         focus:outline-none focus:bg-blue-500
       "
     >
-      <span>Chechout</span>
+      <span>Checkout</span>
       <svg
         class="h-5 w-5 mx-2"
         fill="none"
@@ -108,6 +86,15 @@ export default {
     isOpen: {
       type: Boolean,
       default: false,
+    },
+    products: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  computed: {
+    hasProducts() {
+      return this.products.length > 0;
     },
   },
   methods: {
