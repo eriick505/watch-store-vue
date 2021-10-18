@@ -15,11 +15,19 @@
       overflow-y-auto
       bg-white
       border-l-2 border-gray-300
+      z-50
     "
     :class="{ hidden: !isOpen }"
   >
     <div class="flex items-center justify-between">
       <h3 class="text-2xl font-medium text-gray-700">Your cart</h3>
+      <button
+        class="text-red-700 font-medium"
+        data-testid="clear-cart-button"
+        @click="$cart.clearProducts()"
+      >
+        Clear Cart
+      </button>
       <button
         data-testid="close-button"
         class="text-gray-600 focus:outline-none"
