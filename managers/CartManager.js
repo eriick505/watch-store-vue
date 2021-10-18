@@ -12,25 +12,56 @@ export class CartManager {
     this.state = Vue.observable(initialState);
   }
 
+  getState() {
+    return this.state;
+  }
+
   open() {
     this.state.open = true;
 
-    return this.state;
+    return this.getState();
   }
 
   close() {
     this.state.open = false;
 
-    return this.state;
+    return this.getState();
+  }
+
+  productIsInTheCart(product) {
+    return !!this.state.items.find(({ id }) => id === product.id);
+  }
+
+  hasProducts() {
+    return this.state.items.length > 0;
   }
 
   addProduct(product) {
-    const exists = !!this.state.items.find(({ id }) => id === product.id);
-
-    if (!exists) {
+    if (!this.productIsInTheCart(product)) {
       this.state.items.push(product);
     }
 
-    return this.state;
+    return this.getState();
+  }
+
+  removeProduct(id) {
+    this.state.items = [
+      ...this.state.items.filter((product) => product.id !== id),
+    ];
+
+    return this.getState();
+  }
+
+  clearProducts() {
+    this.state.items = [];
+
+    return this.getState();
+  }
+
+  clearCart() {
+    this.clearProducts();
+    this.close();
+
+    return this.getState();
   }
 }
