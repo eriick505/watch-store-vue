@@ -22,21 +22,52 @@ context('Store', () => {
     g('body').contains('Wrist Watch');
   });
 
-  context('Store > Shopping Cart', () => {
-    it('should not display shopping cart when page first load', () => {
-      cy.visit('/');
+  context.only('Store > Shopping Cart', () => {
+    const quantity = 10;
 
+    beforeEach(() => {
+      server.createList('product', quantity);
+      cy.visit('/');
+    });
+
+    it('should not display shopping cart when page first load', () => {
       gid('shopping-cart').should('have.class', 'hidden');
     });
 
     it('should toggle shopping cart visibility when button is clicked', () => {
-      cy.visit('/');
-
       gid('toggle-button').as('toggleButton');
       g('@toggleButton').click();
       gid('shopping-cart').should('not.have.class', 'hidden');
       g('@toggleButton').click({ force: true });
       gid('shopping-cart').should('have.class', 'hidden');
+    });
+
+    it('should open shopping cart when a product is added', () => {
+      gid('product-card').first().find('button').click();
+      gid('shopping-cart').should('not.have.class', 'hidden');
+    });
+
+    it('should add first product to the cart', () => {
+      gid('product-card').first().find('button').click();
+      gid('cart-item').should('have.length', 1);
+    });
+
+    it('should add 3 products to the cart', () => {
+      cy.addToCart({ indexes: [1, 2, 3] });
+
+      gid('cart-item').should('have.length', 3);
+    });
+
+    it('should add 1 product to the cart', () => {
+      cy.addToCart({ index: 6 });
+
+      gid('cart-item').should('have.length', 1);
+    });
+
+    it('should add all products to the cart', () => {
+      cy.addToCart({ indexes: 'all' });
+
+      gid('cart-item').should('have.length', quantity);
     });
   });
 

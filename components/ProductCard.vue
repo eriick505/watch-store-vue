@@ -15,6 +15,7 @@
           hover:bg-blue-500
           focus:outline-none focus:bg-blue-500
         "
+        data-testid="add-to-cart-button"
         @click="addToCart"
       >
         <svg
